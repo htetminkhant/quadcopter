@@ -10,16 +10,14 @@
 
 int main()
 {
-	double start_time=0;
-	double end_time=10;
-	double dt=0.005,j=0.0;
+	double start_time=0.0,end_time=10.0, dt=0.005;
 	std::vector<double>myvec;
-	while(start_time<=end_time)
-	{	double start_time+=dt;
+	do
+	{   start_time+=dt;
 		myvec.push_back(start_time);
-		
 
 	}
+	while(start_time<=end_time);
 	std::vector<double> :: iterator i;
 	for(int i=0;i<myvec.size();i++)
 	{
