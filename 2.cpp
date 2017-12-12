@@ -53,7 +53,7 @@ int main()
 	double degree [3][1] ;
 	for (int i=0;i<3;i++)
 	{
-	degree[i][0]=((rand()%201+(-100))*pi)/180;
+	degree[i][0]=((rand()%200+(-100))*pi)/180;
 	cout<<endl<<degree[i][0];
 	}
 	cout<<endl;
