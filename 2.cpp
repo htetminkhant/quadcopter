@@ -7,9 +7,10 @@
 #include <conio.h>
 #include <iostream>
 #include <vector>
+#include <time.h>
 using namespace std;
 int main()
-{
+{	srand( time(0));
 	double start_time=0.0,end_time=10.0, dt=0.005;
 	int N=0;
 	std::vector<double>myvec;
@@ -49,10 +50,10 @@ int main()
 	cout<<endl;
 	int deviation =100;
 	double pi=3.142;
-	int degree [3][1] ;
+	double degree [3][1] ;
 	for (int i=0;i<3;i++)
 	{
-	degree[i][0]=(rand()%100-100)*pi/180;
+	degree[i][0]=((rand()%201+(-100))*pi)/180;
 	cout<<endl<<degree[i][0];
 	}
 	cout<<endl;
