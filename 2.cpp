@@ -1,5 +1,3 @@
-// 2.cpp : Defines the entry point for the console application.
-//
 
 #include "stdafx.h"
 #include "stdio.h"
@@ -27,17 +25,9 @@ int main()
 		std::cout << myvec[i]<<" ";
 
 	}
-	cout<<endl;
-	cout<<"N"<<"="<<N;
-	cout<<endl;
 	int x[3][1]={{0},{0},{10}};
 	int xdot[3][1]={{0},{0},{0}};
 	int theta[3][1]={{0},{0},{0}};
-	cout<<x[0][0]<<"\t"<<x[1][0]<<"\t"<<x[2][0];
-	
-	cout<<endl;
-	
-	cout<<endl;
 	double randnumber;
 	int deviation =100,temp;
 	double pi=3.142;
@@ -46,8 +36,7 @@ int main()
 	{
 		randnumber=(double)  rand()/ RAND_MAX;
 		temp=(2*deviation*randnumber-deviation);
-		degree[i][0]=(temp*pi)/180;
-		cout<<"Radian number is "<< randnumber <<" temp answer is "<< temp <<" is equal to " << degree[i][0]<<endl;
+		degree[i][0]=(temp*pi)/180;		
 	}
 	cout<<endl;
 	_getch();
