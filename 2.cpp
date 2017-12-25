@@ -31,31 +31,25 @@ int main()
 	cout<<"N"<<"="<<N;
 	cout<<endl;
 	int x[3][1]={{0},{0},{10}};
-	for(int i=0;i<3;i++)
-	{
-		cout<<endl<<x[i][0];
-	}
-	cout<<endl;
 	int xdot[3][1]={{0},{0},{0}};
-	for(int i=0;i<3;i++)
-	{
-		cout<<endl<<xdot[i][0];
-	}
-	cout<<endl;
 	int theta[3][1]={{0},{0},{0}};
-	for(int i=0;i<3;i++)
-	{
-		cout<<endl<<theta[i][0];
-	}
+	cout<<x[0][0]<<"\t"<<x[1][0]<<"\t"<<x[2][0];
+	
 	cout<<endl;
-	int deviation =100;
+	
+	cout<<endl;
+	double randnumber;
+	int deviation =100,temp;
 	double pi=3.142;
 	double degree [3][1] ;
 	for (int i=0;i<3;i++)
 	{
-	degree[i][0]=((rand()%200+(-100))*pi)/180;
-	cout<<endl<<degree[i][0];
+		randnumber=(double)  rand()/ RAND_MAX;
+		temp=(2*deviation*randnumber-deviation);
+		degree[i][0]=(temp*pi)/180;
+		cout<<"Radian number is "<< randnumber <<" temp answer is "<< temp <<" is equal to " << degree[i][0]<<endl;
 	}
 	cout<<endl;
+	_getch();
 	return 0;
 }
