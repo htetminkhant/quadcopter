@@ -1,4 +1,3 @@
-
 #include "stdafx.h"
 #include "stdio.h"
 #include <stdlib.h>
@@ -7,24 +6,11 @@
 #include <vector>
 #include <time.h>
 using namespace std;
+void myvec1(vector<double>&);
 int main()
 {	srand( time(0));
-	double start_time=0.0,end_time=10.0, dt=0.005;
-	int N=0;
-	std::vector<double>myvec;
-	myvec.push_back(start_time);
-	while(start_time<=end_time)
-	{  
-		start_time+=dt;
-		myvec.push_back(start_time);
-
-	}
-	for(int i=0;i<myvec.size();i++)
-	{   
-		++N;
-		std::cout << myvec[i]<<" ";
-
-	}
+	std::vector<double>myvec2;
+	myvec1(myvec2);
 	int x[3][1]={{0},{0},{10}};
 	int xdot[3][1]={{0},{0},{0}};
 	int theta[3][1]={{0},{0},{0}};
@@ -41,4 +27,22 @@ int main()
 	cout<<endl;
 	_getch();
 	return 0;
+}
+void myvec1(vector<double>& myvec)
+{
+	double start_time=0.0,end_time=10.0, dt=0.005;
+	int N=0;
+	myvec.push_back(start_time);
+	while(start_time<=end_time)
+	{  
+		start_time+=dt;
+		myvec.push_back(start_time);
+
+	}
+	for(int i=0;i<myvec.size();i++)
+	{   
+		++N;
+		std::cout << myvec[i]<<" ";
+
+	}
 }
