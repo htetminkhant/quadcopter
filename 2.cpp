@@ -12,10 +12,10 @@ void thetadot2omega(vector<double>thetadot,vector<double>theta);
 int main()
 {	
 	srand( time(0));
-	vector<double>myvec2;
-	createvector(myvec2);
+	vector<double>timevector;
+	createvector(timevector);
 	int N=0;
-	for(int i=0;i<myvec2.size();i++)
+	for(int i=0;i<timevector.size();i++)
 	{   
 		++N;
 	}
