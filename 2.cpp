@@ -7,9 +7,9 @@
 #include <time.h>
 #include <math.h>
 using namespace std;
-void acceleration(double inputs,vector<double>theta,vector<double>xdot_,double m,double g,double k,double kd);
+void acceleration(double inputs,vector<double>theta,vector<double>xdot_,double m,double g,double k,double kd,vector<vector<double>>a);
 void createvector(vector<double>&myvec);
-void thetadot2omega(vector<double>thetadot,vector<double>angle);
+void thetadot2omega(vector<double>thetadot,vector<double>angle,vector<vector<double>>omega);
 int main()
 {	
 	srand( time(0));
@@ -38,6 +38,7 @@ int main()
 	double i,g=9.81,m=0.5,L=0.25,k=3e-6,b=1e-7,kd=0.25;
 	vector<vector<double>>I(3,vector<double>(3));
 	vector<vector<double>>omega(3,vector<double>(1));
+	vector<vector<double>>a(3,vector<double>(1));
 	I[0][0]=5e-3;
 	I[0][1]=0;
 	I[0][2]=0;
@@ -47,14 +48,18 @@ int main()
 	I[2][0]=0;
 	I[2][1]=0;
 	I[2][2]=10e-3;
-	vector<double>omega_=thetadot2omega(thetadot,theta);
+	
 	for (int j=0;j<N;j++)
 	{
 		i=timevector[j];
 		
-		acceleration(i,theta,xdot,m,g,k,kd);
+		acceleration(i,theta,xdot,m,g,k,kd,a);
 		
 	}
+	thetadot2omega(thetadot,theta,omega);
+	for (int i=0;i<3;i++)
+		for (int j=0;j<1;j++)
+			cout<<omega[i][j]<<"  ";
 	
 	cout<<endl;
 	_getch();
@@ -75,7 +80,7 @@ void createvector(vector<double>& myvec)
 
 }
 
-void thetadot2omega(vector<double>thetadot,vector<double>angle)
+void thetadot2omega(vector<double>thetadot,vector<double>angle,vector<vector<double>>omega)
 {
 	double phi = angle[0],theta_ = angle[1], psi = angle[2];
 	vector<vector<double>>w(3,vector<double>(3));
@@ -89,7 +94,7 @@ void thetadot2omega(vector<double>thetadot,vector<double>angle)
 	w[2][0]=0;
 	w[2][1]=-sin(phi);
 	w[2][2]=cos(theta_)*cos(phi);
-	vector<vector<double>>omega(3,vector<double>(1));
+	
 	for (int i=0;i<3;i++)
 	{
 		for(int j=0;j<1;j++)
@@ -102,10 +107,10 @@ void thetadot2omega(vector<double>thetadot,vector<double>angle)
 			cout << "omega "<<omega[i][j]<<"\n ";
 		}
 	}
-	return omega;
+	
 }
 
-void acceleration(double inputs,vector<double>angle,vector<double>xdot_,double m,double g,double k,double kd)
+void acceleration(double inputs,vector<double>angle,vector<double>xdot_,double m,double g,double k,double kd,vector<vector<double>>a)
 {
 	double phi = angle[2],theta_ = angle[1], psi = angle[0];
 	vector<vector<double>>R(3,vector<double>(3));
@@ -121,7 +126,7 @@ void acceleration(double inputs,vector<double>angle,vector<double>xdot_,double m
 	vector<double>timevector;
 	createvector(timevector);
 	double sumtime=0;
-	for(int i=0;i<timevector.size();i++)
+	for(int i=0;i<2001;i++)
 	{   
 		sumtime+=timevector[i];
 	}
@@ -147,7 +152,7 @@ void acceleration(double inputs,vector<double>angle,vector<double>xdot_,double m
 	}
 	vector<vector<double>>FD(3,vector<double>(1));
 	vector<vector<double>>T2(3,vector<double>(1));
-	vector<vector<double>>a(3,vector<double>(1));
+	
 	for(int i=0;i<3;i++)
 	{
 		for(int j=0;j<1;j++)
