@@ -66,7 +66,7 @@ void thetadot2omega(vector<double>thetadot,vector<double>theta)
 	w[2][0]=0;
 	w[2][1]=-sin(phi);
 	w[2][2]=cos(theta_)*cos(phi);
-	vector<vector<double>>omega(3,vector<double>(3));
+	vector<vector<double>>omega(3,vector<double>(1));
 	for (int i=0;i<3;i++)
 	{
 		for(int j=0;j<1;j++)
