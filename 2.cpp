@@ -7,7 +7,7 @@
 #include <time.h>
 #include <math.h>
 using namespace std;
-void acceleration(double inputs,vector<double>theta,vector<double>xdot_,double m,double g,double k,double kd,vector<vector<double>>a);
+vector<vector<double>> acceleration(double inputs,vector<double>angle,vector<double>xdot_,double m,double g,double k,double kd);
 void createvector(vector<double>&myvec);
 vector<vector<double>> thetadot2omega(vector<double>thetadot,vector<double>angle);
 int main()
@@ -37,8 +37,6 @@ int main()
 	};
 	double i,g=9.81,m=0.5,L=0.25,k=3e-6,b=1e-7,kd=0.25;
 	vector<vector<double>>I(3,vector<double>(3));
-	
-	vector<vector<double>>a(3,vector<double>(1));
 	I[0][0]=5e-3;
 	I[0][1]=0;
 	I[0][2]=0;
@@ -52,15 +50,15 @@ int main()
 	for (int j=0;j<N;j++)
 	{
 		i=timevector[j];
+		vector<vector<double>>omega=thetadot2omega(thetadot,theta);
 		
-		acceleration(i,theta,xdot,m,g,k,kd,a);
 		
 	}
 	cout<<endl;
-	vector<vector<double>>omega=thetadot2omega(thetadot,theta);
+	vector<vector<double>>a=acceleration(i,theta,xdot,m,g,k,kd);
 	for (int i=0;i<3;i++)
 		for (int j=0;j<1;j++)
-			cout<<omega[i][j]<<"  ";
+			cout<<a[i][j]<<"  ";
 	
 	cout<<endl;
 	_getch();
@@ -111,7 +109,7 @@ vector<vector<double>>thetadot2omega(vector<double>thetadot,vector<double>angle)
 	return omega;
 }
 
-void acceleration(double inputs,vector<double>angle,vector<double>xdot_,double m,double g,double k,double kd,vector<vector<double>>a)
+vector<vector<double>> acceleration(double inputs,vector<double>angle,vector<double>xdot_,double m,double g,double k,double kd)
 {
 	double phi = angle[2],theta_ = angle[1], psi = angle[0];
 	vector<vector<double>>R(3,vector<double>(3));
@@ -153,7 +151,7 @@ void acceleration(double inputs,vector<double>angle,vector<double>xdot_,double m
 	}
 	vector<vector<double>>FD(3,vector<double>(1));
 	vector<vector<double>>T2(3,vector<double>(1));
-	
+	vector<vector<double>>a(3,vector<double>(1));
 	for(int i=0;i<3;i++)
 	{
 		for(int j=0;j<1;j++)
@@ -163,4 +161,5 @@ void acceleration(double inputs,vector<double>angle,vector<double>xdot_,double m
 			a[i][j]=gravity[i][j]+T2[i][j]+FD[i][j];
 		}
 	};
+	return a;
 }
