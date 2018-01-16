@@ -9,7 +9,7 @@
 using namespace std;
 void acceleration(double inputs,vector<double>theta,vector<double>xdot_,double m,double g,double k,double kd,vector<vector<double>>a);
 void createvector(vector<double>&myvec);
-void thetadot2omega(vector<double>thetadot,vector<double>angle,vector<vector<double>>omega);
+vector<vector<double>> thetadot2omega(vector<double>thetadot,vector<double>angle);
 int main()
 {	
 	srand( time(0));
@@ -37,7 +37,7 @@ int main()
 	};
 	double i,g=9.81,m=0.5,L=0.25,k=3e-6,b=1e-7,kd=0.25;
 	vector<vector<double>>I(3,vector<double>(3));
-	vector<vector<double>>omega(3,vector<double>(1));
+	
 	vector<vector<double>>a(3,vector<double>(1));
 	I[0][0]=5e-3;
 	I[0][1]=0;
@@ -56,7 +56,8 @@ int main()
 		acceleration(i,theta,xdot,m,g,k,kd,a);
 		
 	}
-	thetadot2omega(thetadot,theta,omega);
+	cout<<endl;
+	vector<vector<double>>omega=thetadot2omega(thetadot,theta);
 	for (int i=0;i<3;i++)
 		for (int j=0;j<1;j++)
 			cout<<omega[i][j]<<"  ";
@@ -80,11 +81,11 @@ void createvector(vector<double>& myvec)
 
 }
 
-void thetadot2omega(vector<double>thetadot,vector<double>angle,vector<vector<double>>omega)
+vector<vector<double>>thetadot2omega(vector<double>thetadot,vector<double>angle)
 {
 	double phi = angle[0],theta_ = angle[1], psi = angle[2];
 	vector<vector<double>>w(3,vector<double>(3));
-	
+	vector<vector<double>>omega(3,vector<double>(1));
 	w[0][0]=1;
 	w[0][1]=0;
 	w[0][2]=-sin(theta_);
@@ -104,10 +105,10 @@ void thetadot2omega(vector<double>thetadot,vector<double>angle,vector<vector<dou
 			{
 				omega[i][j]=omega[i][j]+w[i][k]*thetadot[k];
 			}
-			cout << "omega "<<omega[i][j]<<"\n ";
+			//cout << "omega "<<omega[i][j]<<"\n ";
 		}
 	}
-	
+	return omega;
 }
 
 void acceleration(double inputs,vector<double>angle,vector<double>xdot_,double m,double g,double k,double kd,vector<vector<double>>a)
