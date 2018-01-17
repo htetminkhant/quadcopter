@@ -54,7 +54,7 @@ int main()
 		i=timevector[j];
 		vector<vector<double>>omega=thetadot2omega(thetadot,theta);
 		vector<vector<double>>a=acceleration(i,theta,xdot,m,g,k,kd);
-		
+		vector<vector<double>>omegadot=angular_acceleration(timevector,j,omega,I,L,b,k);
 	}
 	cout<<endl;
 	
@@ -176,5 +176,6 @@ vector<vector<double>> torques(vector<double>timevector,int j,double L,double b,
 vector<vector<double>> angular_acceleration(vector<double>timevector,int j,vector<vector<double>>omega,vector<vector<double>>I,double L,double b,double k)
 {
 	vector<vector<double>>tau=torques(timevector,j,L,b,k);
-
+	vector<vector<double>>omegadot(3,vector<double>(1));
+	return omegadot;
 }
