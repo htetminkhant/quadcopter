@@ -8,6 +8,8 @@
 #include <math.h>
 using namespace std;
 vector<vector<double>> acceleration(double inputs,vector<double>angle,vector<double>xdot_,double m,double g,double k,double kd);
+vector<vector<double>> torques(double inputs,double L,double b,double k);
+vector<vector<double>> angular_acceleration(double inputs,vector<vector<double>>omega,vector<vector<double>>I,double L,double b,double k);
 void createvector(vector<double>&myvec);
 vector<vector<double>> thetadot2omega(vector<double>thetadot,vector<double>angle);
 int main()
@@ -51,14 +53,14 @@ int main()
 	{
 		i=timevector[j];
 		vector<vector<double>>omega=thetadot2omega(thetadot,theta);
-		
+		vector<vector<double>>a=acceleration(i,theta,xdot,m,g,k,kd);
 		
 	}
 	cout<<endl;
-	vector<vector<double>>a=acceleration(i,theta,xdot,m,g,k,kd);
-	for (int i=0;i<3;i++)
+	
+	/*for (int i=0;i<3;i++)
 		for (int j=0;j<1;j++)
-			cout<<a[i][j]<<"  ";
+			cout<<a[i][j]<<"  ";*/
 	
 	cout<<endl;
 	_getch();
@@ -162,4 +164,12 @@ vector<vector<double>> acceleration(double inputs,vector<double>angle,vector<dou
 		}
 	};
 	return a;
+}
+vector<vector<double>> torques(double inputs,double L,double b,double k)
+{
+	
+}
+vector<vector<double>> angular_acceleration(double inputs,vector<vector<double>>omega,vector<vector<double>>I,double L,double b,double k)
+{
+	vector<vector<double>>tau=torques(inputs,L,b,k);
 }
