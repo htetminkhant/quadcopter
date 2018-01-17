@@ -8,8 +8,8 @@
 #include <math.h>
 using namespace std;
 vector<vector<double>> acceleration(double inputs,vector<double>angle,vector<double>xdot_,double m,double g,double k,double kd);
-vector<vector<double>> torques(double inputs,double L,double b,double k);
-vector<vector<double>> angular_acceleration(double inputs,vector<vector<double>>omega,vector<vector<double>>I,double L,double b,double k);
+vector<vector<double>> torques(vector<double>timevector,int j,double L,double b,double k);
+vector<vector<double>> angular_acceleration(vector<double>timevector,int j,vector<vector<double>>omega,vector<vector<double>>I,double L,double b,double k);
 void createvector(vector<double>&myvec);
 vector<vector<double>> thetadot2omega(vector<double>thetadot,vector<double>angle);
 int main()
@@ -165,11 +165,16 @@ vector<vector<double>> acceleration(double inputs,vector<double>angle,vector<dou
 	};
 	return a;
 }
-vector<vector<double>> torques(double inputs,double L,double b,double k)
+vector<vector<double>> torques(vector<double>timevector,int j,double L,double b,double k)
 {
-	
+	vector<vector<double>>tau(3,vector<double>(1));
+	tau[0][0]=L*k*(timevector[j]-timevector[j+2]);
+	tau[1][0]=L*k*(timevector[j+1]-timevector[j+3]);
+	tau[2][0]=b*(timevector[j]-timevector[j+1]+timevector[j+2]-timevector[j+3]);
+	return tau;
 }
-vector<vector<double>> angular_acceleration(double inputs,vector<vector<double>>omega,vector<vector<double>>I,double L,double b,double k)
+vector<vector<double>> angular_acceleration(vector<double>timevector,int j,vector<vector<double>>omega,vector<vector<double>>I,double L,double b,double k)
 {
-	vector<vector<double>>tau=torques(inputs,L,b,k);
+	vector<vector<double>>tau=torques(timevector,j,L,b,k);
+
 }
