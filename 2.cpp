@@ -8,13 +8,15 @@
 #include <math.h>
 using namespace std;
 vector<vector<double>> acceleration(double inputs,vector<double>angle,vector<double>xdot_,double m,double g,double k,double kd);
-vector<vector<double>> torques(vector<double>timevector,int j,double L,double b,double k);
 vector<vector<double>> angular_acceleration(vector<double>timevector,int j,vector<vector<double>>omega,vector<vector<double>>I,double L,double b,double k);
+//vector<vector<double>> torques(vector<double>timevector,int j,double L,double b,double k);
 void createvector(vector<double>&myvec);
 vector<vector<double>> thetadot2omega(vector<double>thetadot,vector<double>angle);
+vector<vector<double>>omega2thetadot(vector<vector<double>>omega,vector<double>angle);
 int main()
 {	
 	srand( time(0));
+	double start_time=0.0,end_time=10.0, dt=0.005;
 	vector<double>timevector;
 	createvector(timevector);
 	int N=0;
@@ -55,6 +57,10 @@ int main()
 		vector<vector<double>>omega=thetadot2omega(thetadot,theta);
 		vector<vector<double>>a=acceleration(i,theta,xdot,m,g,k,kd);
 		vector<vector<double>>omegadot=angular_acceleration(timevector,j,omega,I,L,b,k);
+		omega[0][0]=omega[0][0]+dt*omegadot[0][0];
+		omega[1][0]=omega[1][0]+dt*omegadot[1][0];
+		omega[2][0]=omega[2][0]+dt*omegadot[2][0];
+		vector<vector<double>>thetadot=thetadot2omega(omega,theta);
 	}
 	cout<<endl;
 	
@@ -165,17 +171,68 @@ vector<vector<double>> acceleration(double inputs,vector<double>angle,vector<dou
 	};
 	return a;
 }
-vector<vector<double>> torques(vector<double>timevector,int j,double L,double b,double k)
+/*vector<vector<double>> torques(vector<double>timevector,int j,double L,double b,double k)
 {
 	vector<vector<double>>tau(3,vector<double>(1));
 	tau[0][0]=L*k*(timevector[j]-timevector[j+2]);
 	tau[1][0]=L*k*(timevector[j+1]-timevector[j+3]);
 	tau[2][0]=b*(timevector[j]-timevector[j+1]+timevector[j+2]-timevector[j+3]);
 	return tau;
-}
+}*/
 vector<vector<double>> angular_acceleration(vector<double>timevector,int j,vector<vector<double>>omega,vector<vector<double>>I,double L,double b,double k)
-{
-	vector<vector<double>>tau=torques(timevector,j,L,b,k);
+{	
+	vector<vector<double>>tau(3,vector<double>(1));
+	tau[0][0]=L*k*(timevector[j]-timevector[j+2]);
+	tau[1][0]=L*k*(timevector[j+1]-timevector[j+3]);
+	tau[2][0]=b*(timevector[j]-timevector[j+1]+timevector[j+2]-timevector[j+3]);
+	//vector<vector<double>>tau=torques(timevector,j,L,b,k);
+	
+	vector<vector<double>>omega_(3,vector<double>(1));
+	vector<vector<double>>omega2(3,vector<double>(1));
+	for (int i=0;i<3;i++)
+	{
+		for(int j=0;j<1;j++)
+		{
+			omega_[i][j]=0;
+			for(int k=0;k<3;k++)
+			{
+				omega_[i][j]=omega_[i][j]+I[i][k]*omega[k][j];
+				omega2[i][j]=omega2[i][j]+omega_[k][j]*omega[k][j];
+			}
+		}
+	}
 	vector<vector<double>>omegadot(3,vector<double>(1));
+	omegadot[0][0]=tau[0][0]-omega2[0][0];
+	omegadot[1][0]=tau[1][0]-omega2[1][0];
+	omegadot[2][0]=tau[2][0]-omega2[2][0];
 	return omegadot;
+}
+vector<vector<double>>omega2thetadot(vector<vector<double>>omega,vector<double>angle)
+{
+	double phi = angle[0],theta_ = angle[1], psi = angle[2];
+	vector<vector<double>>w(3,vector<double>(3));
+	vector<vector<double>>thetadot(3,vector<double>(1));
+	w[0][0]=1;
+	w[0][1]=0;
+	w[0][2]=-sin(theta_);
+	w[1][0]=0;
+	w[1][1]=cos(phi);
+	w[1][2]=cos(theta_)*sin(phi);
+	w[2][0]=0;
+	w[2][1]=-sin(phi);
+	w[2][2]=cos(theta_)*cos(phi);
+	
+	for (int i=0;i<3;i++)
+	{
+		for(int j=0;j<1;j++)
+		{
+			thetadot[i][j]=0;
+			for(int k=0;k<3;k++)
+			{
+				thetadot[i][j]=thetadot[i][j]+w[i][k]*omega[k][j];
+			}
+			//cout << "omega "<<omega[i][j]<<"\n ";
+		}
+	}
+	return thetadot;
 }
