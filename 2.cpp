@@ -60,7 +60,16 @@ int main()
 		omega[0][0]=omega[0][0]+dt*omegadot[0][0];
 		omega[1][0]=omega[1][0]+dt*omegadot[1][0];
 		omega[2][0]=omega[2][0]+dt*omegadot[2][0];
-		vector<vector<double>>thetadot=thetadot2omega(omega,theta);
+		vector<vector<double>>thetadot=omega2thetadot(omega,theta);
+		theta[0]=theta[0]+dt*thetadot[0][0];
+		theta[1]=theta[1]+dt*thetadot[1][0];
+		theta[2]=theta[2]+dt*thetadot[2][0];
+		xdot[0]=xdot[0]+dt*a[0][0];
+		xdot[1]=xdot[1]+dt*a[1][0];
+		xdot[2]=xdot[2]+dt*a[2][0];
+		x[0]=x[0]+dt*xdot[0];
+		x[1]=x[1]+dt*xdot[1];
+		x[2]=x[2]+dt*xdot[2];
 	}
 	cout<<endl;
 	
@@ -211,7 +220,7 @@ vector<vector<double>>omega2thetadot(vector<vector<double>>omega,vector<double>a
 {
 	double phi = angle[0],theta_ = angle[1], psi = angle[2];
 	vector<vector<double>>w(3,vector<double>(3));
-	vector<vector<double>>thetadot(3,vector<double>(1));
+	
 	w[0][0]=1;
 	w[0][1]=0;
 	w[0][2]=-sin(theta_);
@@ -221,7 +230,7 @@ vector<vector<double>>omega2thetadot(vector<vector<double>>omega,vector<double>a
 	w[2][0]=0;
 	w[2][1]=-sin(phi);
 	w[2][2]=cos(theta_)*cos(phi);
-	
+	vector<vector<double>>thetadot(3,vector<double>(1));
 	for (int i=0;i<3;i++)
 	{
 		for(int j=0;j<1;j++)
