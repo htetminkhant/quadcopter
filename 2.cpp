@@ -229,12 +229,40 @@ vector<vector<double>> angular_acceleration(int j,vector<vector<double>>omega,ve
 			}
 		}
 	}
+	vector<vector<double>>invI(3,vector<double>(3));
+	float det=0;
+	for(int i=0;i<3;i++)
+	{
+		det=det+(I[0][i]*(I[1][(i+1)%3]*I[2][(i+2)%3]-I[1][(i+2)%3]*I[2][(i+1)%3]));
+	}
+	for(int i=0;i<3;i++)
+	{
+		for(int j=0;j<3;j++)
+		{	
+			invI[j][i]=((I[(i+1)%3][(j+1)%3]*I[(i+2)%3][(j+2)%3])-(I[(i+1)%3][(j+2)%3]*I[(i+2)%3][(j+1)%3]))/det;
+			
+		}
+	}
+	vector<vector<double>>omegadot2(3,vector<double>(1));
+	omegadot2[0][0]=tau[0][0]-omega2[0][0];
+	omegadot2[1][0]=tau[1][0]-omega2[1][0];
+	omegadot2[2][0]=tau[2][0]-omega2[2][0];
 	vector<vector<double>>omegadot(3,vector<double>(1));
-	omegadot[0][0]=tau[0][0]-omega2[0][0];
-	omegadot[1][0]=tau[1][0]-omega2[1][0];
-	omegadot[2][0]=tau[2][0]-omega2[2][0];
+	for (int i=0;i<3;i++)
+	{
+		for(int j=0;j<1;j++)
+		{
+			omegadot[i][j]=0;
+			for(int k=0;k<3;k++)
+			{
+				omegadot[i][j]=omegadot[i][j]+invI[i][k]*omegadot2[k][j];
+			}
+		}
+	}
+
 	return omegadot;
 }
+
 vector<vector<double>>omega2thetadot(vector<vector<double>>omega,vector<double>angle)
 {
 	double phi = angle[0],theta_ = angle[1], psi = angle[2];
@@ -249,6 +277,20 @@ vector<vector<double>>omega2thetadot(vector<vector<double>>omega,vector<double>a
 	w[2][0]=0;
 	w[2][1]=-sin(phi);
 	w[2][2]=cos(theta_)*cos(phi);
+	vector<vector<double>>invw(3,vector<double>(3));
+	float det=0;
+	for(int i=0;i<3;i++)
+	{
+		det=det+(w[0][i]*(w[1][(i+1)%3]*w[2][(i+2)%3]-w[1][(i+2)%3]*w[2][(i+1)%3]));
+	}
+	for(int i=0;i<3;i++)
+	{
+		for(int j=0;j<3;j++)
+		{	
+			invw[j][i]=((w[(i+1)%3][(j+1)%3]*w[(i+2)%3][(j+2)%3])-(w[(i+1)%3][(j+2)%3]*w[(i+2)%3][(j+1)%3]))/det;
+			
+		}
+	}
 	vector<vector<double>>thetadot(3,vector<double>(1));
 	for (int i=0;i<3;i++)
 	{
@@ -257,7 +299,7 @@ vector<vector<double>>omega2thetadot(vector<vector<double>>omega,vector<double>a
 			thetadot[i][j]=0;
 			for(int k=0;k<3;k++)
 			{
-				thetadot[i][j]=thetadot[i][j]+w[i][k]*omega[k][j];
+				thetadot[i][j]=thetadot[i][j]+invw[i][k]*omega[k][j];
 			}
 			//cout << "omega "<<omega[i][j]<<"\n ";
 		}
