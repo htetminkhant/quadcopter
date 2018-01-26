@@ -8,7 +8,7 @@
 #include <math.h>
 using namespace std;
 vector<vector<double>> acceleration(double inputs,vector<double>angle,vector<double>xdot_,double m,double g,double k,double kd);
-vector<vector<double>> angular_acceleration(vector<double>timevector,int j,vector<vector<double>>omega,vector<vector<double>>I,double L,double b,double k);
+vector<vector<double>> angular_acceleration(int j,vector<vector<double>>omega,vector<vector<double>>I,double L,double b,double k);
 //vector<vector<double>> torques(vector<double>timevector,int j,double L,double b,double k);
 void createvector(vector<double>&myvec);
 vector<vector<double>> thetadot2omega(vector<double>thetadot,vector<double>angle);
@@ -50,13 +50,14 @@ int main()
 	I[2][0]=0;
 	I[2][1]=0;
 	I[2][2]=10e-3;
+	int j;
 	
-	for (int j=0;j<N;j++)
+	for ( j=0;j<N;j++)
 	{
 		i=timevector[j];
 		vector<vector<double>>omega=thetadot2omega(thetadot,theta);
 		vector<vector<double>>a=acceleration(i,theta,xdot,m,g,k,kd);
-		vector<vector<double>>omegadot=angular_acceleration(timevector,j,omega,I,L,b,k);
+		vector<vector<double>>omegadot=angular_acceleration(j,omega,I,L,b,k);
 		omega[0][0]=omega[0][0]+dt*omegadot[0][0];
 		omega[1][0]=omega[1][0]+dt*omegadot[1][0];
 		omega[2][0]=omega[2][0]+dt*omegadot[2][0];
@@ -70,6 +71,10 @@ int main()
 		x[0]=x[0]+dt*xdot[0];
 		x[1]=x[1]+dt*xdot[1];
 		x[2]=x[2]+dt*xdot[2];
+		for (int j=0;j<3;j++)
+			cout<<x[j]<<"\n";
+		for (int j=0;j<3;j++)
+			cout<<theta[j]<<"\n";
 	}
 	cout<<endl;
 	
@@ -188,12 +193,25 @@ vector<vector<double>> acceleration(double inputs,vector<double>angle,vector<dou
 	tau[2][0]=b*(timevector[j]-timevector[j+1]+timevector[j+2]-timevector[j+3]);
 	return tau;
 }*/
-vector<vector<double>> angular_acceleration(vector<double>timevector,int j,vector<vector<double>>omega,vector<vector<double>>I,double L,double b,double k)
+vector<vector<double>> angular_acceleration(int j,vector<vector<double>>omega,vector<vector<double>>I,double L,double b,double k)
 {	
+	
+	double start_time=0.0,end_time=10.0, dt=0.005;
+	int j_=0;
+	vector<double>timevector;
+	timevector.push_back(start_time);
+	while(start_time<=end_time)
+	{  
+		start_time+=dt;
+		timevector.push_back(start_time);
+
+	}
+	
+	j_=j;
 	vector<vector<double>>tau(3,vector<double>(1));
-	tau[0][0]=L*k*(timevector[j]-timevector[j+2]);
-	tau[1][0]=L*k*(timevector[j+1]-timevector[j+3]);
-	tau[2][0]=b*(timevector[j]-timevector[j+1]+timevector[j+2]-timevector[j+3]);
+	tau[0][0]=L*k*(3-3);
+	tau[1][0]=L*k*(3-3);
+	tau[2][0]=b*(3-3+3-3);
 	//vector<vector<double>>tau=torques(timevector,j,L,b,k);
 	
 	vector<vector<double>>omega_(3,vector<double>(1));
