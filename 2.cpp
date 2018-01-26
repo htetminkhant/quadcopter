@@ -37,7 +37,7 @@ int main()
 		randnumber=(double)  rand()/ RAND_MAX;
 		temp=(2*deviation*randnumber-deviation);
 		thetadot.push_back((temp*pi)/180);
-		cout<<thetadot[i];
+		//cout<<thetadot[i];
 	};
 	double i,g=9.81,m=0.5,L=0.25,k=3e-6,b=1e-7,kd=0.25;
 	vector<vector<double>>I(3,vector<double>(3));
@@ -52,7 +52,7 @@ int main()
 	I[2][2]=10e-3;
 	int j;
 	
-	for ( j=0;j<N;j++)
+	for ( j=0;j<4;j++)
 	{
 		i=timevector[j];
 		vector<vector<double>>omega=thetadot2omega(thetadot,theta);
@@ -72,9 +72,10 @@ int main()
 		x[1]=x[1]+dt*xdot[1];
 		x[2]=x[2]+dt*xdot[2];
 		for (int j=0;j<3;j++)
-			cout<<x[j]<<"\n";
-		for (int j=0;j<3;j++)
 			cout<<theta[j]<<"\n";
+		for (int j=0;j<3;j++)
+			cout<<x[j]<<"\n";
+		cout<<"\n";
 	}
 	cout<<endl;
 	
