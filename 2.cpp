@@ -52,7 +52,7 @@ int main()
 	I[2][2]=10e-3;
 	int j;
 	
-	for ( j=0;j<4;j++)
+	for ( j=0;j<N;j++)
 	{
 		i=timevector[j];
 		vector<vector<double>>omega=thetadot2omega(thetadot,theta);
