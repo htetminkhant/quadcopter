@@ -52,7 +52,7 @@ int main()
 	I[2][2]=10e-3;
 	int j;
 	
-	for ( j=0;j<N;j++)
+	for ( j=0;j<2;j++)
 	{
 		i=timevector[j];
 		vector<vector<double>>omega=thetadot2omega(thetadot,theta);
@@ -65,16 +65,20 @@ int main()
 		theta[0]=theta[0]+dt*thetadot[0][0];
 		theta[1]=theta[1]+dt*thetadot[1][0];
 		theta[2]=theta[2]+dt*thetadot[2][0];
+		for (int h=0;h<3;h++)
+			cout<<j<<" a	"<<a[h][0]<<"\n";
 		xdot[0]=xdot[0]+dt*a[0][0];
 		xdot[1]=xdot[1]+dt*a[1][0];
 		xdot[2]=xdot[2]+dt*a[2][0];
+		for (int h=0;h<3;h++)
+			cout<<j<<" x	"<<x[h]<<"	xdot	"<<xdot[h]<<"\n\n";
 		x[0]=x[0]+dt*xdot[0];
 		x[1]=x[1]+dt*xdot[1];
 		x[2]=x[2]+dt*xdot[2];
-		for (int j=0;j<3;j++)
-			cout<<theta[j]<<"\n";
-		for (int j=0;j<3;j++)
-			cout<<x[j]<<"\n";
+		/*for (int n=0;n<3;n++)
+			cout<<j<<" theta	"<<theta[n]<<"\n";*/
+		for (int h=0;h<3;h++)
+			cout<<j<<" x	"<<x[h]<<"\n";
 		cout<<"\n";
 	}
 	cout<<endl;
@@ -155,7 +159,7 @@ vector<vector<double>> acceleration(double inputs,vector<double>angle,vector<dou
 	vector<vector<double>>T(3,vector<double>(1));
 	T[0][0]=0;
 	T[1][0]=0;
-	T[2][0]=k*sumtime;
+	T[2][0]=k*12;
 	vector<vector<double>>gravity(3,vector<double>(1));
 	gravity[0][0]=0;
 	gravity[1][0]=0;
