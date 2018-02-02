@@ -6,6 +6,7 @@
 #include <vector>
 #include <time.h>
 #include <math.h>
+#include <fstream>
 using namespace std;
 vector<vector<double>> acceleration(double inputs,vector<double>angle,vector<double>xdot_,double m,double g,double k,double kd);
 vector<vector<double>> angular_acceleration(int j,vector<vector<double>>omega,vector<vector<double>>I,double L,double b,double k);
@@ -16,7 +17,7 @@ vector<vector<double>>omega2thetadot(vector<vector<double>>omega,vector<double>a
 int main()
 {	
 	srand( time(0));
-	double start_time=0.0,end_time=10.0, dt=0.005;
+	double start_time=0.0,end_time=4.0, dt=0.005;
 	vector<double>timevector;
 	createvector(timevector);
 	int N=0;
@@ -51,7 +52,8 @@ int main()
 	I[2][1]=0;
 	I[2][2]=10e-3;
 	int j;
-	
+	ofstream outfile;
+	outfile.open("C:/Users/Htet Min Khant/Documents/superadvisor/mysimulation/mysimulation.csv");
 	for ( j=0;j<timevector.size();j++)
 	{
 		i=timevector[j];
@@ -75,12 +77,14 @@ int main()
 		x[0]=x[0]+dt*xdot[0];
 		x[1]=x[1]+dt*xdot[1];
 		x[2]=x[2]+dt*xdot[2];
-		for (int n=0;n<3;n++)
-			cout<<j<<" theta	"<<theta[n]<<"\n";
+		//outfile<<timevector[j];
+		/*for (int n=0;n<3;n++)
+			cout<<j<<" theta	"<<theta[n]<<"\n";*/
 		for (int h=0;h<3;h++)
-			cout<<j<<" x	"<<x[h]<<"\n";
-		cout<<"\n";
+			outfile<<x[h]<<"\n";
+		outfile<<"\n";
 	}
+	outfile.close();
 	cout<<endl;
 	
 	/*for (int i=0;i<3;i++)
