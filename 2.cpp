@@ -17,10 +17,11 @@
 #include <boost/numeric/ublas/matrix.hpp>
 using namespace boost::numeric::ublas;
 void createvector( int &N,vector<double>&myvec,double start_time,double end_time,double dt);
-vector<vector<double>> acceleration(double inputs,vector<double>angle,vector<double>xdot_,double m,double g,double k,double kd);
-vector<vector<double>> angular_acceleration(int j,vector<double>omega,matrix<double> I,double L,double b,double k);
-vector<vector<double>> thetadot2omega(vector<double>thetadot,vector<double>angle);
-vector<vector<double>>omega2thetadot(vector<double>omega,vector<double>angle);
+vector<double> acceleration(double inputs,vector<double>angle,vector<double>xdot_,double m,double g,double k,double kd);
+vector<double> angular_acceleration(int j,vector<double>omega,matrix<double> I,double L,double b,double k);
+vector<double> thetadot2omega(vector<double>thetadot,vector<double>angle);
+vector<double>omega2thetadot(vector<double>omega,vector<double>angle);
+static const double start_time = 
 int main()
 {	
 	srand( time(0));
@@ -42,6 +43,7 @@ int main()
          0, 0, 10e-3;
 	std::ofstream outfile;
 	outfile.open("C:/Users/Htet Min Khant/Documents/superadvisor/mysimulation/mysimulation.csv");
+	
 	for ( j=0;j<timevector.size();j++)
 	{
 		i=timevector[j];
@@ -77,7 +79,7 @@ void createvector( int &N,vector<double>&myvec,double start_time,double end_time
 	}
 }
 
-vector<vector<double>>thetadot2omega(vector<double>thetadot,vector<double>angle)
+vector<double>thetadot2omega(vector<double>thetadot,vector<double>angle)
 {
 	double phi = angle[0],theta_ = angle[1], psi = angle[2];
 	matrix<double>w(3,3);
@@ -85,10 +87,10 @@ vector<vector<double>>thetadot2omega(vector<double>thetadot,vector<double>angle)
         0, cos(phi), cos(theta_)*sin(phi),
         0, -sin(phi), cos(theta_)*cos(phi);
 	vector<double>omega=prod(w,thetadot );
-  return omega;
+	return omega;
 }
 
-vector<vector<double>> acceleration(double inputs,vector<double>angle,vector<double>xdot_,double m,double g,double k,double kd)
+vector<double> acceleration(double inputs,vector<double>angle,vector<double>xdot_,double m,double g,double k,double kd)
 {
 	double phi = angle[2],theta_ = angle[1], psi = angle[0];
 	matrix<double>R(3,3);
@@ -123,7 +125,7 @@ vector<vector<double>> acceleration(double inputs,vector<double>angle,vector<dou
 	};
 	return a;
 }
-vector<vector<double>> angular_acceleration(int j,vector<double>omega,matrix<double> I,double L,double b,double k)
+vector<double> angular_acceleration(int j,vector<double>omega,matrix<double> I,double L,double b,double k)
 {	
 	
 	double start_time=0.0,end_time=10.0, dt=0.005;
@@ -140,7 +142,7 @@ vector<vector<double>> angular_acceleration(int j,vector<double>omega,matrix<dou
 	return omegadot;
 }
 
-vector<vector<double>>omega2thetadot(vector<double>omega,vector<double>angle)
+vector<double>omega2thetadot(vector<double>omega,vector<double>angle)
 {
 	double phi = angle[0],theta_ = angle[1], psi = angle[2];
 	matrix<double>w(3,3);
