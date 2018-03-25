@@ -31,9 +31,10 @@ static const double start_time=0.0,end_time=4.0, dt=0.005;
 double randnumber,pi=3.142;
 int main()
 {	
-	srand( time(0));
+	srand( (unsigned int)time(0));
 	double i,g=9.81,m=0.5,L=0.25,k=3e-6,b=1e-7,kd=0.25;
-	int N=0,deviation =100,temp=0,j;
+	int N=0,deviation =100,temp=0;
+	unsigned int j;
 	vector<double>timevector,x(3),xdot(3,0),theta(3,0),thetadot(3),omega,a,omegadot,in(4,0);
 	matrix<double> I(3,3);
 	I <<= 5e-3, 0, 0,
