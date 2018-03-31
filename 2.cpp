@@ -30,19 +30,18 @@ vector<double>omega2thetadot(vector<double>omega,vector<double>angle);
 int main()
 {	
 	srand( (unsigned int)time(0));
-	double i,g=9.81,m=0.5,L=0.25,k=3e-6,b=1e-7,kd=0.25 ,dt=0.005;
+	double i,g=9.81,m=0.5,L=0.25,k=3e-6,b=1e-7,kd=0.25 ,dt=0.005,j;
 	int temp=0,deviation =100;
-	double j;
 	vector<double>timevector(2001),x(3),xdot(3,0),theta(3,0),thetadot(3),omega,a,omegadot,in(4,0);
 	matrix<double> I(3,3);
 	I <<= 5e-3, 0, 0,
 		0, 5e-3, 0,
 		0, 0, 10e-3;
-	createvector(timevector);
 	x <<= 0, 0, 10;
+	createvector(timevector);
 	thetadot=deg2rad(deviation,thetadot,temp);
 	std::ofstream outfile;
-	outfile.open("C:/Users/Htet Min Khant/Documents/superadvisor/mysimulation/mysimulation1.csv");
+	outfile.open("C:/Users/Htet Min Khant/Documents/superadvisor/mysimulation/mysimulation2.csv");
 	for ( j=0;j<timevector.size();j++)
 	{
 		i=timevector[j];
@@ -58,6 +57,7 @@ int main()
 		for (int h=0;h<3;h++)
 			outfile<<x[h]<<"\n";
 		outfile<<"\n";
+
 	}
 	outfile.close();
 	std::cout<<timevector.size()<<std::endl;
@@ -65,6 +65,9 @@ int main()
 	_getch();
 	return 0;
 }
+
+
+
 void createvector(vector<double>& myvec)
 {
 	double start_time=0.0,end_time=10.0, dt=0.005;
@@ -87,7 +90,7 @@ vector<double> deg2rad(int deviation,vector<double>thetadot,int temp)
 vector<double> input()
 {
 	vector<double> in(4);
-	in<<=700+150,700,700+150,700;
+	in<<=(700+10)*(740),700*700,740*(700+10),700*700;
 	return in;
 }
 double sum(vector<double>in)
@@ -123,43 +126,41 @@ matrix<double>rotation(vector<double>angle)
 vector<double> acceleration(vector<double>in,vector<double>angle,vector<double>xdot_,double m,double g,double k,double kd)
 {
 
-	vector<double>gravity(3),T_,FD(3),T2(3),a(3);
-	gravity <<= 0, 0,-g;
+	vector<double>gravity(3),T_,FD(3),a(3);
 	matrix<double>R(3,3);
+	gravity <<= 0, 0,-g;
 	R=rotation(angle);
 	T_=prod(R,thrust(in,k));
-	for(int i=0;i<3;i++)
-	{
-		FD[i]=-kd*xdot_[i];
-		a[i]=gravity[i]+(1/m)*T_[i]+FD[i];
-	};
+	FD=-kd*xdot_;
+	a=gravity+(1/m)*T_+FD;
 	return a;
 }
 vector<double> angular_acceleration(vector<double>in,matrix<double> I,vector<double>omega,double L,double b,double k)
 {	
-	vector<double>tau(3);
+	vector<double>tau(3),omegadot(3);
 	tau=torques(in,L,b,k);
-	vector<double>omegadot(3);
 	omegadot=prod(-I,tau-(omega,prod(I,omega)));
 	return omegadot;
 }
 vector<double>thetadot2omega(vector<double>thetadot,vector<double>angle)
 {
 	double phi = angle[0],theta_ = angle[1], psi = angle[2];
+	vector<double>omega;
 	matrix<double>w(3,3);
 	w <<= 1, 0, -sin(theta_),
 		0, cos(phi), cos(theta_)*sin(phi),
 		0, -sin(phi), cos(theta_)*cos(phi);
-	vector<double>omega=prod(w,thetadot );
+	omega=prod(w,thetadot );
 	return omega;
 }
 vector<double>omega2thetadot(vector<double>omega,vector<double>angle)
 {
 	double phi = angle[0],theta_ = angle[1], psi = angle[2];
+	vector<double>thetadot;
 	matrix<double>w(3,3);
 	w <<= 1, 0, -sin(theta_),
 		0, cos(phi), cos(theta_)*sin(phi),
 		0, -sin(phi), cos(theta_)*cos(phi);
-	vector<double>thetadot=prod(-w,omega);
+	thetadot=prod(-w,omega);
 	return thetadot;
 }
