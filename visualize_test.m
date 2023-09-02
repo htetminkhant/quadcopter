@@ -1,7 +1,8 @@
 
 % Visualize the quadcopter simulation as an animation of a 3D quadcopter.
 
-function h = visualize_test(data)
+function h = 
+
     % Create a figure with three parts. One part is for a 3D visualization,
     % and the other two are for running graphs of angular velocity and displacement.
 %     load (data);
@@ -22,30 +23,6 @@ function h = visualize_test(data)
     % Animate the quadcopter with data from the simulation.
     animate(data, t, thrusts, plots);
 end
-
-function R = rotation(angles)
-    phi = angles(3);
-    theta = angles(2);
-    psi = angles(1);
-
-    R = zeros(3);
-    R(:, 1) = [
-        cos(phi) * cos(theta)
-        cos(theta) * sin(phi)
-        - sin(theta)
-    ];
-    R(:, 2) = [
-        cos(phi) * sin(theta) * sin(psi) - cos(psi) * sin(phi)
-        cos(phi) * cos(psi) + sin(phi) * sin(theta) * sin(psi)
-        cos(theta) * sin(psi)
-    ];
-    R(:, 3) = [
-        sin(phi) * sin(psi) + cos(phi) * cos(psi) * sin(theta)
-        cos(psi) * sin(phi) * sin(theta) - cos(phi) * sin(psi)
-        cos(theta) * cos(psi)
-    ];
-end
-
 
 % Animate a quadcopter in flight, using data from the simulation.
 function animate(data, model, thrusts, plots)
