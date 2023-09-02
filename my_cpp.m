@@ -1,4 +1,4 @@
-function my_cpp(x,theta,xdot,thetadot,model,thrusts,plots)
+function my_cpp(x,theta,xdot,thetadot,model,thrusts)
 
 % Simulation times, in seconds.
 Start_time = 0;
@@ -31,70 +31,30 @@ for t =  times
     x = x + dt * xdot;
     
    % Visualize plot for motion of quad over time
-subplot(plots(1));
+    plots = createplot();
+    subplot(plots(1));
 
-% Compute translation to correct linear position coordinates.
-move = makehgtform('translate',x);
 
-rotate = getRotation(theta);    
-% Move the quadcopter to the right place, after putting it in the correct orientation.
-set(model,'Matrix', move * rotate);
+    % Compute translation to correct linear position coordinates.
+    move = makehgtform('translate',x);
 
-visThrust(thrusts, move, rotate)
+    rotate = getRotation(theta);    
+    % Move the quadcopter to the right place, after putting it in the correct orientation.
+    set(model,'Matrix', move * rotate);
 
-[xmin, xmax, ymin, ymax, zmin, zmax] = getLimits(x);
-axis([xmin xmax ymin ymax zmin zmax]);
-%hold off;
-drawnow;
-visVelocities(t, theta, thetadot)
+    visThrust(thrusts, move, rotate)
+
+    [xmin, xmax, ymin, ymax, zmin, zmax] = getLimits(x);
+    axis([xmin xmax ymin ymax zmin zmax]);
+    %hold off;
+    drawnow;
+    visVelocities(t, theta, thetadot);
 end
 end 
 
 
-function [rotate] = getRotation(theta)
-    % Compute rotation to correct angles. Then, turn this rotation into a 4x4 matrix represting this affine transformation.
-    rotate = rotation(theta);
-    rotate = [rotate, zeros(3, 1); zeros(1, 3), 1];
-end
-% end function getRotation
 
- function [xmin, xmax, ymin, ymax, zmin, zmax] = getLimits(x)
-    % Update the drawing.      
-    xmin = x(1)-20;
-    xmax = x(1)+20;
-    ymin = x(2)-20;
-    ymax = x(2)+20;
-    zmin = x(3)-5;
-    zmax = x(3)+5;
- end
- % end function getLimits
  
-function visThrust(thrusts, move, rotate)
-     % Compute scaling for the thrust cylinders.
-    scales = exp(inputvalue()/min(abs(inputvalue())) + 5) - exp(6) + 1.5;
-    for i = 1:4
-        s = scales(i);
-        if s < 0
-            scalez = makehgtform('yrotate', pi)  * makehgtform('scale', [1, 1, abs(s)]);
-        elseif s > 0
-            scalez = makehgtform('scale', [1, 1, s]);
-        end
-        set(thrusts(i), 'Matrix', move * rotate * scalez);
-    end
- end
- % end function visThrust
  
- function visVelocities(t, theta, thetadot)
-     % Use the bottom two parts for angular velocity and displacement.   
-    subplot(plots(2));
-    multiplot(t,thetadot);
-    xlabel('Time (s)');
-    ylabel('Angular Velocity (rad/s)');
-    title('Angular Velocity');
 
-    subplot(plots(3));
-    multiplot(t,theta);
-    xlabel('Time (s)');
-    ylabel('Angular Displacement (rad)');
-    title('Angular Displacement'); 
- end
+ 

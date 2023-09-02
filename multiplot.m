@@ -3,8 +3,7 @@ function multiplot(time,value)
     persistent vals times
     
     % Select the parts of the data to plot.
-    times = 0;
-    vals = 0;
+    
     times = [times; time];
     vals =  [vals; value];
      
