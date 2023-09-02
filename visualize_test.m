@@ -1,7 +1,7 @@
 
 % Visualize the quadcopter simulation as an animation of a 3D quadcopter.
 
-function h = visualize_test()
+function h = 
 
     % Create a figure with three parts. One part is for a 3D visualization,
     % and the other two are for running graphs of angular velocity and displacement.
